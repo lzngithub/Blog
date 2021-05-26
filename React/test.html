@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    const jerry = {
+ sayThis: function () {
+ console.log(this); // `this` 指向什么？
+  },
+
+ exec: function (cb) {
+ cb();
+  },
+
+ render: function () {
+ this.exec(this.sayThis);
+  },
+}
+
+jerry.render(); // 输出结果是什么？
+  </script>
+</body>
+</html>
