@@ -24,8 +24,8 @@ constructor(props) {
 ```
 
 2.在调用的时候使用bind绑定this
-```javascript
 
+```javascript
 class Button extends React.Component {
   handleClick(){
     console.log('this is:', this);

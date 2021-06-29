@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    // 基本使用
+    // const demo =async () => {
+    //   const a = await new Promise(resolve => {
+    //     console.log(1)
+    //     resolve()
+    //   })
+    //   console.log(a)
+    //   console.log(3)
+    // }
+    // demo().then(res => {console.log(res)})
+    // console.log(demo())
+    // console.log(2)
+    // 错误处理
+    const demo = async ()=>{
+      try{
+        console.log(await Promise.reject(1));
+      }catch(e){
+        console.log('错误信息', e)
+      }
+      console.log(await Promise.resolve(2));
+        console.log('完成了');
+    }
+    demo()
+  </script>
+</body>
+</html>

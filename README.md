@@ -18,3 +18,7 @@
 ## react目录
 
 [1.html+css标签化语义](https://github.com/lzngithub/Blog/issues/4)
+
+## javaScript目录
+
+[1.async理解](https://github.com/lzngithub/Blog/issues/4)
