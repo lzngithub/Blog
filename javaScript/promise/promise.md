@@ -10,9 +10,7 @@ promise 是目前 JS 异步编程的主流解决方案，遵循 Promises/A+ 方�
 
 所谓Promise，简单说就是一个容器，里面保存着某个未来才会结束的事件（通常是一个异步操作）的结果。从语法上说，Promise 是一个对象，从它可以获取异步操作的消息。
 
-Promise对象的状态不受外界影响。Promise对象代表一个异步操作，有三种状态：pending（进行中）、fulfilled（已成功）和rejected（已失败）
-
-一旦状态改变，就不会再变，任何时候都可以得到这个结果
+Promise对象的状态不受外界影响。Promise对象代表一个异步操作，有三种状态：pending（进行中）、fulfilled（已成功）和rejected（已失败）,一旦状态改变，就不会再变，任何时候都可以得到这个结果
 
 无法取消Promise，一旦新建它就会立即执行，无法中途取消。其次，如果不设置回调函数，Promise内部抛出的错误，不会反应到外部。第三，当处于pending状态时，无法得知目前进展到哪一个阶段。
 
@@ -37,3 +35,67 @@ new Promise((resolve, reject) => {
 })
 
 ```
+
+## 常用方法
+
+* Promise.resolve()
+
+```js
+const promise = Promise.resolve(1)
+promise.then(res => {console.log(res)}) // 1
+```
+
+* Promise.reject() 同上，不过是用catch来进行捕获
+
+* Promise.all()
+
+Promise.all 接收一个 promise 对象数组作为参数，只有全部的 promise 都已经变为 fulfilled 状态或者有一个promise状态变为rejected后才会继续后面的处理。Promise.all 本身返回的也是一个 promise
+
+```js
+const promise1 = new Promise((resolve, reject) => {
+  setTimeout(() => {
+    resolve('promise1')
+  }, 5000)
+})
+const promise2 = new Promise((resolve, reject) => {
+  setTimeout(() => {
+    resolve('promise2')
+  }, 1000)
+})
+const promises = [promise1, promise2]
+
+Promise.all(promises).then( // 执行不分先后顺序,是并发的，但是返回的res是顺序对应的
+  res => {
+    console.log(res) //  ["promise1", "promise2"]
+  },
+  err => { 
+    console.log(err)
+  }
+)
+```
+
+* Promise.race()
+
+Promise.race 和 Promise.all 类似，只不过这个函数会在 promises 中第一个 promise 的状态扭转后就开始后面的处理（fulfilled、rejected 均可）
+
+```js
+const promise1 = new Promise((resolve, reject) => {
+  setTimeout(() => {
+    resolve('promise1')
+  }, 5000)
+})
+const promise2 = new Promise((resolve, reject) => {
+  setTimeout(() => {
+    resolve('promise2')
+  }, 1000)
+})
+const promises = [promise1, promise2]
+
+Promise.race(promises).then(
+  res => {
+    console.log(res) //  promise2
+  },
+  err => { 
+    console.log(err)
+  }
+)

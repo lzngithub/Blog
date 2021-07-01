@@ -1,26 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
 </head>
+
 <body>
   <script>
-    new Promise((resolve, reject) => {
-      const bol = true // 控制是成功状态还是失败状态的开关
-      if (bol) {
-        resolve('失败')
-      }else {
-        reject('成功')
-      }
-    }).then(res => {
-      console.log(res)
-    }).catch(err => {
-      console.log(err)
+    const promise1 = new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve('promise1')
+      }, 5000)
     })
-    
+    const promise2 = new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve('promise2')
+      }, 1000)
+    })
+    const promises = [promise1, promise2]
+
+    Promise.race(promises).then( // 执行不分先后顺序，但是返回的res是顺序对应的
+      res => {
+        console.log(res) //  ["promise1", "promise2"]
+      },
+      err => { 
+        console.log(err)
+      }
+    )
+
   </script>
 </body>
+
 </html>
