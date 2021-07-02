@@ -10,26 +10,24 @@
 
 <body>
   <script>
-    const promise1 = new Promise((resolve, reject) => {
-      setTimeout(() => {
-        resolve('promise1')
-      }, 5000)
-    })
-    const promise2 = new Promise((resolve, reject) => {
-      setTimeout(() => {
-        resolve('promise2')
-      }, 1000)
-    })
-    const promises = [promise1, promise2]
-
-    Promise.race(promises).then( // 执行不分先后顺序，但是返回的res是顺序对应的
-      res => {
-        console.log(res) //  ["promise1", "promise2"]
-      },
-      err => { 
-        console.log(err)
+    function A (name) {
+      this.name = name
+      this.write = function () {
+        console.log(this.name)
       }
-    )
+    }
+    A.tell = function () {
+      console.log(999)
+    }
+    A.prototype.tell = function () {
+      console.log(888)
+    }
+
+    A.tell()
+
+    var a = new A('LI')
+    a.write()
+    console.log(a)
 
   </script>
 </body>
