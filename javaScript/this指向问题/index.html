@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // 题目
+      var age = 10;
+      var person = {
+        age: 20,
+        getAge() {
+          var age = 30;
+          console.log(this.age);
+        },
+      };
+
+      person.getAge() // 20
+
+      var vgetAge = person.getAge;
+
+      vgetAge(); // 10
+
+      (1, person.getAge)() // 10
+
+      person.getAge.bind(person)(); // 20
+
+      person.getAge.call(); // 10
+
+      person.getAge.call(person); // 20
+
+      function getAge2() {
+        this.age = 40;
+        person.getAge();
+      }
+
+      getAge2(); // 20
+
+      console.log(age); // 40
+
+      function getAge3() {
+        this.age = 50;
+        this.getAge4 = function() {
+          person.getAge.call(this);
+        };
+      }
+      new getAge3().getAge4(); // 50
+      var getAge4 = new getAge3().getAge4
+      getAge4() // 40
+
+      function GetAge4() {
+        this.age = 60;
+        this.getAge5 = () => {
+          person.getAge.call(this);
+        };
+      }
+      new GetAge4().getAge5(); // 60
+      var getAge5 = new GetAge4().getAge5
+      getAge5() // 60
+
+      var age2 = 10;
+      var person2 = {
+        age2: 20,
+        getAge2: () => {
+          var age2 = 30;
+          return this.age2;
+        },
+      };
+      console.log(person2.getAge2.call()); // 10
+      console.log(person2.getAge2.call(person2)); // 10
+    </script>
+  </body>
+</html>
