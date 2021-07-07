@@ -45,6 +45,8 @@ class Deal{
         this.btns = document.querySelector(".num")
         //功能按键
         this.func = document.querySelector(".signs")
+
+        this.clear = document.getElementsByClassName('clear')[0]
         //加减乘除的符号对照表
         this.path = {
             "+":"add",
@@ -136,6 +138,13 @@ class Deal{
             this.dataDeal("-");
             this.dataDeal("*");
             this.dataDeal("/");
+        })
+        this.clear = addEventListener('click', () =>{
+            this.str = "";
+            this.res = 0;
+            this.cal.result = 0;
+            this.funcCount = 0;
+            this.show();
         })
     }
     //数据处理模块

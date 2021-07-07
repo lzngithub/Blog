@@ -8,23 +8,19 @@
   </head>
   <body>
     <script>
-      function SuperType() {
-        this.name = "jack";
-        this.friends = [];
+      var c;
+      function demo (b) {
+        console.log(a)
+        console.log(b)
+        console.log(c)
+        console.log(d)
+        var a = 1;
+        console.log(a)
+        function a() {}
+        function b() {}
+        var d = function () {}
       }
-      SuperType.prototype.getFriends = function () {};
-
-      function SubType() {
-        // 属性继承
-        SuperType.call(this);
-      }
-      function inherit(sup, sub) {
-        sub.prototype = Object.create(sup.prototype);
-        sub.prototype.constructor = sub;
-      }
-      // 方法继承
-      inherit(SuperType, SubType);
-      const obj = new SubType();
+      demo(2)
     </script>
   </body>
 </html>
