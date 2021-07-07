@@ -1,28 +1,46 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
-</head>
-<body>
-  <script>
-    const jerry = {
- sayThis: function () {
- console.log(this); // `this` 指向什么？
-  },
-
- exec: function (cb) {
- cb();
-  },
-
- render: function () {
- this.exec(this.sayThis);
-  },
-}
-
-jerry.render(); // 输出结果是什么？
-  </script>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // console.log(a, window.a)
+      // // var a = 0;
+      // if(true){
+      //   console.log(a, window.a)
+      //   console.log(b)
+      //   var b
+      //   // a = 1;
+      //   console.log(a, window.a)
+      //   function a() {console.log(6666)}
+      //   console.log(a, window.a)
+      //   a = 21;
+      //   console.log("里面", a);
+      // }
+      // console.log("外部", a);
+      // var x = 0;
+      // console.log(x, window.x)
+      // function a(){
+      //     console.log(x, window.x);
+      //     var x
+      //     {
+      //       var x
+      //       console.log(x, window.x)
+      //       function x() {}
+      //     }
+      //     console.log(x, window.x);
+      //     // let x = 1;
+      // }
+      // a();
+      {
+        var b = 1
+        function b() {}
+      }
+      console.log(b)
+    </script>
+  </body>
 </html>
