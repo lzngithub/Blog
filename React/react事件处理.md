@@ -137,16 +137,16 @@ class Button extends React.Component {
 ```javascript
 // 使用 ES6 的 class 语法，模拟react的render中事件的绑定
 class Cat {
- sayThis () {
- console.log(this); // undefined
+  sayThis () {
+    console.log(this); // undefined
   }
 
- exec (cb) {
- cb(); // 没有显示的调用，在class内不会默认绑定this，cb()函数内的this没有指向任何对象
+  exec (cb) {
+    cb(); // 没有显式的调用，在class内不会默认绑定this，cb()函数内的this没有指向任何对象
   }
 
- render () {
- this.exec(this.sayThis); // 用点操作符只是把这个方法的引用值传递到了exec方法内部，sayThis这个方法内的this只有在真正调用执行的时候才会确定
+  render () {
+    this.exec(this.sayThis); // 用点操作符只是把这个方法的引用值传递到了exec方法内部，sayThis这个方法内的this只有在真正调用执行的时候才会确定
   }
 }
 
