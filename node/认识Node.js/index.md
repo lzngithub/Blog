@@ -2,9 +2,9 @@
 
 ## node相关工具
 
-### mvn
+### nvm
 
-node版本管理工具，mac直接装mvn，windows可以装nvm-windows或者nodlist，从github找下载地址
+node版本管理工具，mac直接装nvm，windows可以装nvm-windows或者nodlist，从github找下载地址
 
 ### nvm常用命令
 
@@ -136,6 +136,35 @@ nrm 可以帮助您轻松快速地在不同的 npm 注册中心之间切换，�
 npm i nrm -g // 安装nrm
 nrm ls // 查看各种源的地址
 nrm use <源的类型> // 换源
+nrm test // 测试各个源的速度
 npm config set registry https://registry.npmjs.org //换源
 npm config get registry // 查看当前源
 ```
+
+## npx
+
+npm 从5.2版开始，增加npx命令, npx想要解决的主要问题，是调用项目内部安装的模块
+
+比如，你项目安装了Mocha，一般来说，你想调用Mocha，只能在项目的脚本和package.json的scripts字段里面，如果想在命令行下面调用，必须像下面这样
+
+```shell
+# 在项目的根目录下
+$ node_modules/.bin/mocha --version
+```
+
+但是使用npx，就可以这样
+
+```shell
+npx mocha -version
+```
+
+同时，如果你本地和全局都没有安装mocha，npx会帮你把mocha下来（暂时放在临时文件夹，也可能是内存，反正执行完之后，就是删掉，只会执行一次），然后执行
+
+常用命令
+
+```js
+npx --no-install http-server // 强制使用本地模块
+npx --ignore-existing http-server // 强制使用远程的
+npx http-server //先查看本地有没有，有用本地的，没有就使用远程的
+```
+
