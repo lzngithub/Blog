@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <canvas id="mycanvas" width=200 height=200></canvas>
+  <button onclick="uploadQRCode('mycanvas', 'mycanvas')">下载图片</button>
+  <script>
+    const mycanvas=document.getElementById("mycanvas");
+    const ctx=mycanvas.getContext("2d");
+    ctx.fillStyle="#8CC7B5";
+    ctx.fillRect(0,0,200,200);
+    // 下载图片
+    const uploadQRCode = (id, filename) => {
+      const canvasElement = document.getElementById(id)
+
+      const MIME_TYPE = "image/png"
+
+      const imgURL = canvasElement.toDataURL(MIME_TYPE)
+
+      let dlLink = document.createElement('a')
+      dlLink.download = filename
+      dlLink.href = imgURL
+      dlLink.dataset.downloadurl = [MIME_TYPE, dlLink.download, dlLink.href].join(':')
+
+      document.body.appendChild(dlLink)
+      dlLink.click()
+      document.body.removeChild(dlLink)
+    }
+  </script>
+</body>
+</html>

@@ -19,7 +19,7 @@ console.log(her); // {firstname: "jianhua", lastname:"li"}
 
 new 一个对象过程中，主要发生了以下步骤：
 
- 1. 以构造器的prototype属性为原型，创造一个新的、空的对象,主要用Object.create()方法
+ 1. 以构造器(构造函数)的prototype属性为原型，创造一个新的、空的对象,主要用Object.create()方法
  2. 将它的引用赋给构造器的 this，同时将参数传到构造器中执行
  3. 如果构造器没有手动返回对象，则返回第一步创建的新对象，如果有，则舍弃掉第一步创建的新对象，返回手动return的对象。
 

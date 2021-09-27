@@ -125,3 +125,62 @@ const Child3 = styled.div`
 ```
 
 Portals,主要是为了当父元素设置了一些比如overflow：hidden或者z-index这些css属性导致子元素在视觉呈现上面有局限性而出现的功能，它并不会改变react数据流向和事件冒泡的顺序，上面例子中，如果不采用Portals方法，由于Child2比Child1层级高，所以Child3层级就会被遮挡，当采用Portals方法，Child3是挂载Child2上的，所以Child3就能显示出来了，在当点击Child3的时候，控制台打印的也是child1，因为时间事件冒泡还是按照react树的结构。
+
+## setState()
+
+```js
+setState(updater, [callback])
+```
+
+updater: (state, props) => stateChange
+callback: 更新后的回调函数
+
+按照官网的意思，setState()是一个触发操作，将对组件 state 的更改排入队列，并通知 React 需要使用更新后的 state 重新渲染此组件及其子组件，其操作时异步的，
+
+用法：
+
+```js
+// 数据结构
+this.state = {
+  user: {
+    name: 'liang'
+  },
+  list: [1,2]
+}
+// 修改
+this.setState((state, props) => {
+  return {
+    user: Object.assign({}, state.user, { name: 'li' })
+    list: state.list.concat([3])
+  }
+})
+```
+
+## forceUpdate()
+
+```js
+component.forceUpdate(callback)
+```
+
+* 调用 forceUpdate() 强制让组件重新渲染。
+* forceUpdate()产生的渲染会跳过shouldComponentUpdate()周期
+
+## defaultProps
+
+defaultProps是Class属性，为 Class 组件添加默认 props
+
+用法
+
+```js
+static defaultProps = {}
+```
+
+## displayName
+
+Class属性，通常不用设置，一般用于高阶组件的调试
+
+用法
+
+```js
+static displayName = ''
+```
