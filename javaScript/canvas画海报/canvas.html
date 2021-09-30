@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Document</title>
+	</head>
+	<body>
+		<canvas id="canvas"></canvas>
+		<script>
+			//圆角矩形
+			CanvasRenderingContext2D.prototype.roundRect = function (x, y, w, h, r) {
+				let min_size = Math.min(w, h)
+				if (r > min_size / 2) r = min_size / 2
+				// 开始绘制
+				this.beginPath()
+				this.moveTo(x + r, y)
+				this.arcTo(x + w, y, x + w, y + h, r)
+				this.arcTo(x + w, y + h, x, y + h, r)
+				this.arcTo(x, y + h, x, y, r)
+				this.arcTo(x, y, x + w, y, r)
+				this.closePath()
+				return this
+			}
+
+			function canvasTextAutoLine(str, ctx, initX, initY, width, lineHeight) {
+				let lineWidth = 0
+				let lastSubStrIndex = 0
+				let options = {}
+				initY += 14 //字体大小
+				options.text = []
+				options.height = 0
+				for (let i = 0; i < str.length; i++) {
+					lineWidth += ctx.measureText(str[i]).width
+					if (str[i] === '\n') {
+						options.text.push([str.substring(lastSubStrIndex, i), initX, initY])
+						options.height += lineHeight
+						initY += lineHeight
+						lineWidth = 0
+						lastSubStrIndex = i + 1
+					} else if (lineWidth > width - initX) {
+						//减去initX,防止边界出现的问题
+						// ctx.fillText(str.substring(lastSubStrIndex,i),initX,initY);
+						options.text.push([str.substring(lastSubStrIndex, i), initX, initY])
+						options.height += lineHeight
+						initY += lineHeight
+						lineWidth = 0
+						lastSubStrIndex = i
+					}
+					if (i === str.length - 1) {
+						options.text.push([str.substring(lastSubStrIndex, i + 1), initX, initY])
+						// ctx.fillText(str.substring(lastSubStrIndex,i+1),initX,initY);
+					}
+				}
+				options.height += 14
+				return options
+			}
+
+			function drawCanvas(canvas, config = {}) {
+				console.log(config)
+				console.log('开始绘制')
+				// 创建一个2d的绘画环境对象
+				let ctx = canvas.getContext('2d')
+
+				// 数据处理
+				const { bgImage, customColor, data, detail, owner } = config
+				const { member } = data
+
+				// 控制canvas的属性
+				canvas.style.width = '375px' // 呈现在浏览器的大小
+				canvas.width = 750 // canvas真实画布的大小
+				canvas.height = 2348
+				let canvasHeight = 0
+
+				let headImage = bgImage.find((d) => d.type === 'head')
+				let bg = bgImage.find((d) => d.type === 'bg')
+				let footer = bgImage.find((d) => d.type === 'footer')
+				let memberImage = bgImage.find((d) => d.type === 'member')
+				let attachments = bgImage.filter((d) => d.type === 'attachment')
+				let qrcode = bgImage.find((d) => d.type === 'qrcode')
+				let org_logo = bgImage.find((d) => d.type === 'org_logo')
+				let female = bgImage.find((d) => d.type === 'female')
+				let male = bgImage.find((d) => d.type === 'male')
+				console.log(bgImage)
+
+				//字体的外边
+				let textMargin = 20 * 2
+				let textPadding = 20 * 2
+				let textLineHeight = 38
+				let srtOption = this.canvasTextAutoLine(
+					detail,
+					ctx,
+					textMargin + textPadding,
+					headImage.image.height + textMargin + textPadding,
+					canvas.width - textMargin - textPadding,
+					textLineHeight
+				)
+
+				let image_gap = 10 * 2
+				let image_height = (canvas.width - textMargin * 2 - image_gap) / 2
+				let imagesH = 0
+				//预览图高度
+				if (attachments.length > 0) {
+					let rows = Math.ceil(attachments.length / 2) //上取整
+					imagesH = rows * (image_height + image_gap)
+				}
+				console.log(imagesH)
+
+				let textHeight = srtOption.height + textMargin * 20 + textPadding * 2
+				canvasHeight += textHeight
+				canvasHeight += imagesH
+				canvasHeight += footer.image.height
+				canvas.height = canvasHeight
+
+				// 描绘背景
+				let bImage = ctx.createPattern(config.bgImage[1].image, 'repeat')
+				ctx.fillStyle = bImage
+				ctx.fillRect(0, 0, this.canvas.width, canvasHeight)
+
+				// 绘制头部
+				ctx.drawImage(
+					config.bgImage[0].image,
+					0,
+					0,
+					config.bgImage[0].image.width,
+					config.bgImage[0].image.height
+				)
+				// 绘制会员头像
+				ctx.font = '22pt STXihei Microsoft Yahei'
+				ctx.strokeStyle = '#fff'
+				ctx.lineWidth = 5
+				ctx.save()
+				ctx.arc(106 + 39, 647 + 39, 39, 0, Math.PI * 2)
+				ctx.clip()
+				ctx.drawImage(memberImage.image, 106, 647, 78, 78)
+				ctx.restore()
+				ctx.stroke()
+
+				// 会员名字
+				ctx.fillStyle = customColor || '#fff'
+				let member_width = ctx.measureText(member.name ? member.name : '').width + 10
+				ctx.fillText(member.name ? member.name : '', 200, 652 + 24)
+
+				// 会员性别图标
+				let genderImage
+				if (member.gender) {
+					if (member.gender === 'female') {
+						genderImage = female
+					} else if (member.gender === 'male') {
+						genderImage = male
+					}
+				}
+				if (genderImage) {
+					ctx.globalAlpha = 1
+					ctx.drawImage(genderImage.image, 200 + member_width, 654, 28, 28)
+				}
+				// 绘制昵称
+				ctx.font = '18pt STXihei Microsoft Yahei'
+				ctx.globalAlpha = 0.6
+				ctx.fillText(
+					(member.nickname ? '(' + member.nickname + ')' : '') + member.birthday,
+					200,
+					698 + 20
+				)
+				// 绘制详情
+				ctx.roundRect(
+					textMargin,
+					textMargin + headImage.image.height,
+					canvas.width - textMargin * 2,
+					srtOption.height + textPadding * 2,
+					8
+				)
+				ctx.fillStyle = '#0e6543'
+				ctx.globalAlpha = 0.4
+				ctx.fill()
+
+				// 画weizi
+				ctx.font = '18pt STXihei Microsoft Yahei'
+				ctx.fillStyle = '#fff'
+				ctx.globalAlpha = 1
+				srtOption.text.map((t) => {
+					ctx.fillText(...t)
+				})
+
+				// 预览图高度
+				let text_y =
+					textMargin * 2 + textPadding * 2 + headImage.image.height + srtOption.height
+				let image_y = imagesH + text_y
+				if (attachments.length > 0) {
+					let attachment_height = 0
+					attachments.map((attachment, index) => {
+						if (index % 2 === 0 && index !== 0) {
+							//增加图片高度，带空隙
+							attachment_height += image_height + image_gap
+						}
+						let x = textMargin
+						let y = text_y + attachment_height
+						if (index % 2 === 1) {
+							x = image_height + textMargin + 10
+						}
+						console.log(x, y)
+						ctx.fillStyle = '#fff'
+						//外面白边
+						let whiteSpace = 4 * 2
+						ctx.fillRect(x, y, image_height, image_height)
+						// console.log(attachment.image);
+						const imageWidth = attachment.image.width
+						const imageHeight = attachment.image.height
+						const imageRatio = imageWidth / imageHeight
+						const canvasRatio = 1
+						let sx, sy, sHeight, sWidth
+						if (imageRatio < canvasRatio) {
+							sWidth = imageWidth
+							sHeight = sWidth / canvasRatio
+							sx = 0
+							sy = (imageHeight - sHeight) / 2
+						} else {
+							sHeight = imageHeight
+							sWidth = imageHeight * canvasRatio
+							sy = 0
+							sx = (imageWidth - sWidth) / 2
+						}
+						ctx.drawImage(
+							attachment.image,
+							sx,
+							sy,
+							sWidth,
+							sHeight,
+							x + whiteSpace,
+							y + whiteSpace,
+							image_height - whiteSpace * 2,
+							image_height - whiteSpace * 2
+						)
+					})
+				}
+
+				//描绘底部
+				ctx.drawImage(footer.image, 0, image_y, footer.image.width, footer.image.height)
+				// 底部管理机构文字
+				ctx.font = '24pt STXihei Microsoft Yahei'
+				ctx.fillStyle = customColor || '#fff'
+				ctx.fillText(owner.name ? owner.name : '', 599, image_y + 29 + 9)
+			}
+			function LoadingSrc(canvas, config) {
+				let statusArray = []
+				config.bgImage.forEach((item, index) => {
+					const image = new Image()
+					// image.crossOrigin = '*'
+					image.src = item.src.replace('https:', 'http:')
+					statusArray.push(false)
+					// 图片加载完成才会触发onload方法
+					image.onload = () => {
+						statusArray[index] = true
+						item.image = image
+						if (statusArray.every((status) => status)) {
+							// 所有图片加载完成才会调用绘画函数
+							console.log('图片加载完成')
+							drawCanvas(canvas, config)
+						}
+					}
+				})
+			}
+			let canvas = document.getElementById('canvas')
+			let config = {
+				customColor: '#210f78',
+				owner: {
+					name: '管理机构'
+				},
+				detail: '"脸上总是带着热清洋溢的笑容，高兴的清绪常常能感染\n周围的人。做事，读书，作业，参加和组织各种活动，总\n是带着一份快乐的清绪去参与，不但自己开心，也带动周\n围的同学开心，是一个有影响力的同学。"',
+				data: {
+					member: {
+						name: '小萝莉',
+						nickname: '小萝莉',
+						gender: 'female',
+						birthday: '5岁6个月'
+					}
+				},
+				bgImage: [
+					{
+						type: 'head',
+						src: 'https://lolita-api.oss-cn-shenzhen.aliyuncs.com/chocloud/web/images/home_school/makcoo/head.png'
+					},
+					{
+						type: 'bg',
+						src: 'https://lolita-api.oss-cn-shenzhen.aliyuncs.com/chocloud/web/images/home_school/makcoo/bg.png'
+					},
+					{
+						type: 'footer',
+						src: 'https://lolita-api.oss-cn-shenzhen.aliyuncs.com/chocloud/web/images/home_school/makcoo/footer.png'
+					},
+					{
+						type: 'member', // 会员头像
+						src: 'http://lolita-api.oss-cn-shenzhen.aliyuncs.com/chocloud/web/images/home_school/pic_user.jpg'
+					},
+					{
+						type: 'male',
+						src: 'https://lolita-api.oss-cn-shenzhen.aliyuncs.com/chocloud/web/images/home_school/ic_male%402x.png?ver=12312'
+					},
+					{
+						type: 'female',
+						src: 'https://lolita-api.oss-cn-shenzhen.aliyuncs.com/chocloud/web/images/home_school/ic_female%402x.png?ver=12312'
+					},
+					{
+						type: 'attachment',
+						src: 'http://lolita-api.oss-cn-shenzhen.aliyuncs.com/chocloud/web/images/home_school/pic_1.jpg'
+					},
+					{
+						type: 'attachment',
+						src: 'http://lolita-api.oss-cn-shenzhen.aliyuncs.com/chocloud/web/images/home_school/pic_2.jpg'
+					}
+				]
+			}
+			LoadingSrc(canvas, config)
+		</script>
+	</body>
+</html>
