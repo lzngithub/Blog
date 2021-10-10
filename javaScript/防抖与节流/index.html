@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <style>
+    div{
+      display: flex;
+      justify-content: space-between;
+      width: 350px;
+      margin-bottom: 50px;
+    }
+    input {
+      width: 200px;
+    }
+  </style>
+  <div>
+    没有防抖的搜索：<input id='input1' type="text">
+  </div>
+  <div>
+    加防抖的搜索：<input id='input2' type="text">
+  </div>
+  <div>
+    加节流的搜索：<input id='input3' type="text">
+  </div>
+
+  <script>
+    // 模仿数据请求
+    function ajax(content, type) {
+      const typeText = type ? `(${type})` : ''
+      console.log(`发起请求:${content+typeText}`)
+    }
+
+    let input1 = document.getElementById('input1')
+    let input2 = document.getElementById('input2')
+    let input3 = document.getElementById('input3')
+    
+    input1.addEventListener('input', (e) => {
+      ajax(e.target.value)
+    })
+
+    // 防抖函数
+    function debounce(fun, delay) {
+      let record = null
+      return (...content) => {
+        if (record) {
+          clearTimeout(record)
+        }
+        record = setTimeout(() => {
+            fun(...content)
+        }, delay)
+      }
+    }
+
+    let debounceAjax = debounce(ajax, 500)
+
+    input2.addEventListener('input', (e) => {
+      debounceAjax(e.target.value, 'debounce')
+    })
+
+    // 节流函数
+    function throttle(fun, delay) {
+      let record = null
+      return (...content) => {
+        if (!record) {
+          record = setTimeout(() => {
+            fun(...content)
+            clearTimeout(record)
+            record = null
+          }, delay)
+        }
+      }
+    }
+
+    let throttleAjax = throttle(ajax, 500)
+
+    input3.addEventListener('input', (e) => {
+      throttleAjax(e.target.value, 'throttle')
+    })
+  </script>
+</body>
+</html>

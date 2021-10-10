@@ -30,6 +30,22 @@ item1最终宽度 =（700 - 100 - 200 - 100）/ ( 1 + 2) * 1 + 200 = 300
 item1最终宽度 = 100  
 ```
 
+* 设置flex属性，不管是用单值语法还是双值语法，会改变flex-grow flex-shrink flex-basis 的默认属性
+
+比如
+
+```text
+flex: 1;
+
+这个是单值语法：1代表的是flex-grow的值，其他两个值会被省略，被省略的时候，会有默认值
+
+flex-grow: 省略时默认值为 1。 (原本默认值为 0)
+flex-shrink: 省略时默认值为 1。 (原本默认值为 1)
+flex-grow: 省略时默认值为 0。 (原本默认值为 auto)
+
+所以flex: 1 等于 flex: 1 1 0，而不是felx: 1 1 auto
+```
+
 ## flex布局可以实现的几个效果
 
 前置准备工作
@@ -105,5 +121,27 @@ item1的宽度是item2 item3的两倍
 .item3 {
     background-color: #bbb;
     flex: 1;
+}
+```
+
+按倍数去分配容器的宽度
+
+```css
+.content {
+    display: flex;
+    width: 600px;
+    height: 100px;
+}
+.item1 {
+    background-color: #eee;
+    flex: 1;
+}
+.item2 {
+    background-color: #ccc;
+    flex: 2;
+}
+.item3 {
+    background-color: #bbb;
+    flex: 3;
 }
 ```
