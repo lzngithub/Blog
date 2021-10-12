@@ -54,8 +54,8 @@ git branch -d 分支名
 git add .
 ```
 
-添加单个文件到暂存区
+添加单个/多个文件到暂存区
 
 ```shell
-git add 文件具体路径
+git add 文件1具体路径 文件2具体路径
 ```
