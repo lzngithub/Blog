@@ -59,3 +59,9 @@ git add .
 ```shell
 git add 文件1具体路径 文件2具体路径
 ```
+
+查看暂存区文件的改动情况
+
+```shell
+git status -s
+```
