@@ -47,3 +47,15 @@ git merge 被合并分支名
 ```shell
 git branch -d 分支名
 ```
+
+添加全部文件到暂存区
+
+```shell
+git add .
+```
+
+添加单个文件到暂存区
+
+```shell
+git add 文件具体路径
+```
