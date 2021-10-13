@@ -71,3 +71,55 @@ git add 文件1具体路径 文件2具体路径
 ```shell
 git status -s
 ```
+
+保存当前工作区和暂存区的修改，建立一条stash信息，默认的说明信息是最后一次提交的节点号和提交说明
+
+```shell
+git stash
+```
+
+保存当前工作区和暂存区的修改，建立一条stash信息
+
+```shell
+git stash save '说明信息'
+```
+
+查看stash列表
+
+```shell
+git stash list
+```
+
+默认将工作栈中最上面的 stash 应用到仓库中，可以带id指定某个版本
+
+```shell
+Git stash apply
+Git stash apply stash@{1}
+```
+
+跟stash apply相似，但会删除对用的stash
+
+```shell
+Git stash pop
+Git stash pop stash@{1}
+```
+
+> 应用stash时，如果工作区有修改会失败，必须将修改加到暂存区才可以
+
+用stash新建分支，默认最新的stash，可指名stash id
+
+```shell
+git stash branch 分支名 stash@{id}
+```
+
+清除所有的stash
+
+```shell
+Git stash clear
+```
+
+删除一条所有的stash，默认最新，可指名stash id
+
+```shell
+Git stash drop stash@{id}
+```
