@@ -12,6 +12,12 @@ git fetch
 git branch --set-upstream-to=origin/远程分支名称
 ```
 
+查看分支
+
+```shell
+git branch
+```
+
 新建分支
 
 ```shell
