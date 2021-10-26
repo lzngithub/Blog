@@ -6,16 +6,30 @@
 git fetch
 ```
 
+## branch
+
 关联本地分支对应到远程分支
 
 ```shell
 git branch --set-upstream-to=origin/远程分支名称
 ```
 
-查看分支
+查看本地分支
 
 ```shell
 git branch
+```
+
+查看远程分支
+
+```shell
+git branch -r
+```
+
+查看所有分支
+
+```shell
+git branch -a
 ```
 
 新建分支
@@ -54,6 +68,24 @@ git merge 被合并分支名
 git branch -d 分支名
 ```
 
+删除远程分支
+
+```shell
+git push origin --delete 远程分支名
+```
+
+取消远程关联的仓库
+
+```shell
+git remote rm origin
+```
+
+关联远程仓库
+
+```shell
+git remote add origin 远程仓库地址
+```
+
 添加全部文件到暂存区
 
 ```shell
@@ -71,6 +103,8 @@ git add 文件1具体路径 文件2具体路径
 ```shell
 git status -s
 ```
+
+## stash
 
 保存当前工作区和暂存区的修改，建立一条stash信息，默认的说明信息是最后一次提交的节点号和提交说明
 
@@ -122,4 +156,120 @@ Git stash clear
 
 ```shell
 Git stash drop stash@{id}
+```
+
+## git branch -M main
+
+```shell
+git branch -M main
+```
+
+因为可能涉及种族歧视的问题，一般用于把master分支改为main分支，-M是 --move --force的简写，强制移动/重命名为main
+
+## git push -u origin 本地分支:远程分支
+
+用于把还未关联远程分支的分支推到远程仓库上面，如果远程没有对应名字的分支，则会创建该分支，远程分支名可省略，默认等于本地分支名，相当于下面两个命令的简写
+
+```js
+git branch --set-upstream-to=origin/远程仓库名 本地仓库名（默认当前分支，可不写）
+git push origin 本地分支名：远程分支名
+```
+
+当关联好远程分支，且远程分支和本地分支的名字一致，可以直接用
+
+```shell
+git push
+git pull
+```
+
+命令推拉代码，否则需要在推拉代码的时候要指定分支，用以下命令
+
+```shell
+git pull origin 远程分支名:本地分支名
+git push origin 本地分支名:远程分支名
+```
+
+注意：最好保持本地分支和远程关联分支保持一致，符合规范，也方便
+
+## tag
+
+tag的作用就是方便我们拉取特定一次commit的代码
+
+tag，标签，是git版本库的一个快照，指向某个commit的指针
+
+列出标签
+
+```shell
+git tag
+```
+
+创建标签
+
+git 支持两种标签，轻量标签（lightweight）与附注标签（annotated），附注标签包含打标签者的名字、电子邮件地址，日期时间，标签信息。轻量标签则没有这些
+
+创建附注标签
+
+```shell
+git tag -a v1.4 -m "my version 1.4"
+```
+
+创建附注标签
+
+```shell
+git tag v1.4
+```
+
+后期打标签
+
+```shell
+git tag -a v1.5 1392099ce6504d14e7392eecadf0d0d3b26e3680 -m '版本5'
+```
+
+查看具体某个tag的信息
+
+```shell
+git show v1.5
+```
+
+将标签单个推送到远程
+
+```shell
+git push origin v1.5
+```
+
+次性推送很多标签
+
+```shell
+git push origin --tags
+```
+
+删除本地tag
+
+```shell
+git tag -d v1.5
+```
+
+删除远程tag
+
+```shell
+git push origin :refs/tags/v1.5 //推送空的tag达到删除的目的，会在本地创建对应tag
+git push origin --delete v1.5
+```
+
+获取远程tag
+
+```shell
+git fetch origin tag v1.5
+```
+
+检出tag(通常不用，因为这会使仓库处于“分离头指针（detached HEAD）”的状态)
+
+```shell
+git checkout v1.5
+```
+
+通常是根据tag新建分支，如果要修改代码的话
+
+```shell
+git checkout -b version2 v1.5
 ```
