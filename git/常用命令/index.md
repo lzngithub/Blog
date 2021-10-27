@@ -98,7 +98,7 @@ git add .
 git add 文件1具体路径 文件2具体路径
 ```
 
-查看暂存区文件的改动情况
+查看暂存区文件的改动情况，也可以查看冲突文件
 
 ```shell
 git status -s
@@ -179,7 +179,7 @@ git push origin 本地分支名：远程分支名
 
 ```shell
 git push
-git pull
+git pull // 默认是merge方式
 ```
 
 命令推拉代码，否则需要在推拉代码的时候要指定分支，用以下命令
@@ -273,3 +273,49 @@ git checkout v1.5
 ```shell
 git checkout -b version2 v1.5
 ```
+
+## vi&vim
+
+vi和vim都是命令行中的编辑器，vim可以看作vi的升级版本，两者的使用方法差不多
+
+打开文件
+
+```shell
+vim 文件名
+```
+
+三种模式：
+
+* 命令模式
+* 输入模式，也叫插入模式
+* 底线命令模式
+
+进入文件即为命令模式，此时按键输入会被当成一个命令，命令模式下按i进入输入模式，按:进入底线命令模式，Esc键会退出两个模式进入命令模式
+
+底线命令模式
+
+```shell
+:w       //保存文件
+:w vpser.net //保存至vpser.net文件
+:q          //退出编辑器，如果文件已修改请使用下面的命令
+:q!        //退出编辑器，且不保存
+:wq         //退出编辑器，且保存文件
+```
+
+## git rebase
+
+rebase作用一：合并提交记录
+
+```js
+git rebase -i 508eb263f1e2402d91da4e2776ce0d158c4fa286 //最近一次不用合共的commitid
+git rebase -i HEAD~2 //合并最近的两次提交
+```
+
+作用二：合共分支（衍合）
+
+```shell
+git rebase master
+git pull --rebase // 以rebase方式拉远程分支代码
+```
+
+分支处于dev分支，执行git rebase master，衍合master分支，找到两个分支的公共的那一次提交，把dev分支从那一次提交后面的commit取消，保存起来，然后把dev分支更新到最新的master分支提交，然后把刚才保存起来的应用到dev分支上
