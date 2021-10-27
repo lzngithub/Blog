@@ -6,6 +6,28 @@
 git fetch
 ```
 
+## 代理
+
+查看代理
+
+```shell
+git config --global -l
+```
+
+设置代理
+
+```shell
+git config --global http.proxy http://127.0.0.1:7890
+git config --global https.proxy https://127.0.0.1:7890
+```
+
+取消代理
+
+```shell
+git config --global --unset http.proxy
+git config --global --unset https.proxy
+```
+
 ## branch
 
 关联本地分支对应到远程分支
