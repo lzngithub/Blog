@@ -241,12 +241,14 @@
 				ctx.font = '24pt STXihei Microsoft Yahei'
 				ctx.fillStyle = customColor || '#fff'
 				ctx.fillText(owner.name ? owner.name : '', 599, image_y + 29 + 9)
+				let src = canvas.toDataURL('image/png')
 			}
 			function LoadingSrc(canvas, config) {
 				let statusArray = []
 				config.bgImage.forEach((item, index) => {
 					const image = new Image()
-					// image.crossOrigin = '*'
+					// image图片加载开启CORS模式
+					image.crossOrigin = 'Anonymous'
 					image.src = item.src.replace('https:', 'http:')
 					statusArray.push(false)
 					// 图片加载完成才会触发onload方法
