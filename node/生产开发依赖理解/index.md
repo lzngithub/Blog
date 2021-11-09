@@ -1,0 +1,23 @@
+# node项目下的开发生产依赖
+
+node项目下的package.json文件中的devDependencies和dependencies有什么区别？我做项目的时候，我应该把我下载的的依赖放在哪个当中。
+
+网上的说法：
+
+* 生产环境中用到的放在dependencies中
+* 开发环境中用到的放在devDependencies中
+
+这个说法是没错的，但是我们有时候确会感觉迷糊，问题根源在于我们要理解这个生产环境和开发环境指的是什么
+
+举个列子，我们用webpack来打包我们的项目，对于webpack来说，是开发环境还是生产环境？
+
+答案是生产环境，因为我们是在用webpack这个插件
+
+然后我们再来问个问题，那对于webpack这个插件来说，什么时候对于它来说是开发环境呢，当然是它的团队在开发它（webpack）的时候
+
+webpack的项目在开发的时候，它也会有它自己的dependencies和devDependencies，这两个类依赖在开发阶段都会进行下载使用，他们两者的区别在于我们在去使用它的时候，我们下载安装webpack的时候，我们会安装webpack的同时会去安装webpack中dependencies的依赖，而不会安装webpack中devDependencies的依赖
+
+我们知道这个之后，我们可以总结出
+
+* 如果项目只是我们自己用的时候，依赖放在dependencies或者devDependencies都是可以的，像我们平常开发的vue、react项目，在打包的时候，我们就已经把需要的依赖打进项目里面了，所以不存在运行的时候缺少依赖这种情况，所以放哪都是可以的
+* 当我们这个项目需要当成插件给别人用的时候，我们就要区分这两个依赖，因为，如果我们把应该放在dependencies的依赖放在devDependencies中，就是导致用户安装的时候缺少依赖，项目报错，如果反过来，用户就会下载了不需要的依赖，对用户来说不友好。
