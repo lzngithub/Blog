@@ -143,3 +143,22 @@ let b = a.search(/abc/g);
 console.log(a); // 'ABC abc abc 123'
 console.log(b); // 4
 ```
+
+17.startWith(),判断当前字符串是否是以另外一个给定的子字符串开头，是则返回true，反之false
+
+```JS
+str.startWith(subStr[, position])
+```
+
+* str: 被搜索字符串
+* subStr：搜索字符串
+* positin：可选，开始搜索的位置，默认为0
+
+```js
+let a = "hello world"
+let b = "hello"
+let c = "wo"
+console.log(a.startWith(b))     // true
+console.log(a.startWith(b, 1))  // fasle
+console.log(a.startWith(c, 6))  // true
+```
