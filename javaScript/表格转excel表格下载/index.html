@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Document</title>
+		<script src="./jquery-3.6.0.min.js"></script>
+	</head>
+	<body>
+		<div>
+			<table border="1" id="table">
+				<thead>
+					<tr>
+						<!-- 可以使用rowspan和colspan来合并单元格 -->
+						<th rowspan="1" style="color: red">编号</th>
+						<th rowspan="1">学号</th>
+						<th rowspan="1">姓名</th>
+						<th rowspan="1">性别</th>
+						<th rowspan="1">年龄</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>1</td>
+						<td>2016001</td>
+						<td style="font-weight: bold; height: 70px; color: lightcoral">张三</td>
+						<td>男</td>
+						<td>13</td>
+					</tr>
+					<tr>
+						<td>2</td>
+						<td>2016002</td>
+						<td>李四</td>
+						<td>女</td>
+						<td>12</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<button>导出excel表格</button>
+		<script>
+			function tableToExcel (table, name, style) {
+				let	template =
+					'<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">\
+						<head>\
+							<meta name=ProgId content=Excel.Sheet>\
+							<meta name=Generator content="Microsoft Excel 11">\
+							<meta http-equiv="content-type" content="text/html;charset=utf-8">\
+							<!--[if gte mso 9]>\
+								<xml>\
+								<x:ExcelWorkbook>\
+									<x:ExcelWorksheets>\
+									<x:ExcelWorksheet>\
+										<x:Name>__worksheet__</x:Name>\
+										<x:WorksheetOptions>\
+										<x:DisplayGridlines/>\
+										</x:WorksheetOptions>\
+									</x:ExcelWorksheet>\
+									</x:ExcelWorksheets>\
+								</x:ExcelWorkbook>\
+								</xml><![endif]-->\
+							<style>table{font-family:微软雅黑;} table tr td{vertical-align: middle;text-align:center;mso-number-format:"\@";}__style__</style>\
+						</head>\
+						<body>__table__</body>\
+					</html>';
+				function format (s, c) {
+					// replace方法：(\w+)会把对应的内容提取出来,对应p参数
+					return s.replace(/__(\w+)__/g, function (m, p) {
+						return c[p]
+					})
+				}
+				// 生成table对应的html内容
+				let temp_table = $(table).clone()
+				// 把表格内所有的a标签替换成div标签
+				temp_table.find('a').each(function () {
+					$(this).replaceWith(function () {
+						return $('<div/>', {
+							html: this.innerHTML
+						})
+					})
+				})
+
+				if (temp_table.html() != undefined) {
+					// 转换成DOMstring
+					table = '<table>' + temp_table.html() + '</table>'
+				}
+				let ctx = {
+					worksheet: name || 'Worksheet',
+					table: table || '',
+					style: style || ''
+				}
+				let content = format(template, ctx)
+				content = new Blob([content], { type: 'application/vnd.ms-excel;base64' })
+				let url = window.URL.createObjectURL(content)
+				let a = document.createElement('a')
+				document.body.appendChild(a)
+				a.href = url
+				a.download = name.replace(/\./g, '') + '.xls'
+				setTimeout(() => {
+					a.click()
+				}, 100)
+
+				setTimeout(() => {
+					//释放一个之前已经存在的、通过调用 URL.createObjectURL() 创建的 URL 对象
+					window.URL.revokeObjectURL(url)
+					$(a).remove()
+				}, 500)
+			}
+			$('button').on('click', () => {
+				console.log('click')
+				let table = $('#table')
+				tableToExcel(table, 'lijianhua')
+			})
+		</script>
+	</body>
+</html>
