@@ -8,6 +8,12 @@
 git fetch
 ```
 
+同步远程删除分支
+
+```shell
+git remote prune origin
+```
+
 ## 代理
 
 查看代理
